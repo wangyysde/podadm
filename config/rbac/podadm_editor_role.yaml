@@ -1,0 +1,27 @@
+# permissions for end users to edit podadms.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: podadm
+    app.kubernetes.io/managed-by: kustomize
+  name: podadm-editor-role
+rules:
+- apiGroups:
+  - podadm.sysadm.cn
+  resources:
+  - podadms
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - podadm.sysadm.cn
+  resources:
+  - podadms/status
+  verbs:
+  - get

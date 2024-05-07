@@ -1,0 +1,23 @@
+# permissions for end users to view podadms.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: podadm
+    app.kubernetes.io/managed-by: kustomize
+  name: podadm-viewer-role
+rules:
+- apiGroups:
+  - podadm.sysadm.cn
+  resources:
+  - podadms
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - podadm.sysadm.cn
+  resources:
+  - podadms/status
+  verbs:
+  - get
