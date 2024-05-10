@@ -28,14 +28,31 @@ type PodAdmSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of PodAdm. Edit podadm_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// NameSpace is the namespace of the configMap or Secret
+	NameSpace string `json:"nameSpace,omitempty"`
+
+	// ObjectName name of the configMap or Secret
+	ObjectName string `json:"objectName,omitempty"`
+
+	// Kind of configMap or Secret
+	Kind string `json:"kind,omitempty"`
 }
 
 // PodAdmStatus defines the observed state of PodAdm
 type PodAdmStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	// RefObjects list the objects which using the configMap or Secret
+	RefObjects []RefObject `json:"refObjects"`
+}
+
+type RefObject struct {
+	// TypeMeta data of the object which using the configMap or Secret
+	metav1.TypeMeta `json:",inline"`
+
+	// ObjectName name of the object which using the configMap or Secret
+	ObjectName string `json:"objectName,omitempty"`
 }
 
 //+kubebuilder:object:root=true
