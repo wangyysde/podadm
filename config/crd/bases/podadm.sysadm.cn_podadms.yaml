@@ -39,6 +39,7 @@ spec:
           spec:
             description: PodAdmSpec defines the desired state of PodAdm
             properties:
+<<<<<<< HEAD
               kind:
                 description: Kind of configMap or Secret
                 type: string
@@ -47,10 +48,16 @@ spec:
                 type: string
               objectName:
                 description: ObjectName name of the configMap or Secret
+=======
+              foo:
+                description: Foo is an example field of PodAdm. Edit podadm_types.go
+                  to remove/update
+>>>>>>> createCRD20240507
                 type: string
             type: object
           status:
             description: PodAdmStatus defines the observed state of PodAdm
+<<<<<<< HEAD
             properties:
               refObjects:
                 description: RefObjects list the objects which using the configMap
@@ -80,6 +87,8 @@ spec:
                 type: array
             required:
             - refObjects
+=======
+>>>>>>> createCRD20240507
             type: object
         type: object
     served: true
