@@ -18,10 +18,15 @@ package controller
 
 import (
 	"context"
+	"sigs.k8s.io/controller-runtime/pkg/builder"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	podadmv1beta1 "podadm/api/v1beta1"
@@ -47,16 +52,29 @@ type PodAdmReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
 func (r *PodAdmReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
+	logger.Info("request object information is: ", "object name:", req.Name, "namespace:", req.Namespace, "object string:", req.String())
 	// TODO(user): your logic here
 
 	return ctrl.Result{}, nil
+}
+
+func (r *PodAdmReconciler) getConfigMapChanged(ctx context.Context, configMap client.Object) []reconcile.Request {
+	logger := log.FromContext(ctx)
+	logger.Info("changed configMap is:", "configMap name:", configMap.GetName(), "namespaces", configMap.GetNamespace())
+
+	requests := make([]reconcile.Request, 0)
+
+	return requests
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *PodAdmReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&podadmv1beta1.PodAdm{}).
+		Watches(&corev1.ConfigMap{}, handler.EnqueueRequestsFromMapFunc(r.getConfigMapChanged),
+			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
+		).
 		Complete(r)
 }
